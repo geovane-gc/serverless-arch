@@ -1,11 +1,3 @@
-scalar AWSDate
-
-scalar AWSTime
-
-scalar AWSDateTime
-
-scalar AWSTimestamp
-
 type Query {
   fetchCompany(input: FetchCompanyInput): FetchCompany
   fetchCompanies(input: FetchCompaniesInput): FetchCompanies
@@ -45,8 +37,4 @@ type Company {
   createdAt: AWSDate
   updatedAt: AWSDate
   approvalStatusUpdatedAt: AWSDate
-}
-
-schema {
-  query: Query
 }
