@@ -1,6 +1,6 @@
-import { FetchCompaniesUseCase } from "../fetch-companies";
+import { FetchCompaniesUseCase } from '../fetch-companies';
 
 export function makeFetchCompaniesUseCase() {
-    const useCase = new FetchCompaniesUseCase();
-    return useCase;
+  const useCase = new FetchCompaniesUseCase();
+  return useCase;
 }

@@ -1,16 +1,16 @@
-import { Company, CreateCompanyInput } from "../../graphql/types/graphql";
+import { Company, CreateCompanyInput } from '../../graphql/types/graphql';
 
 export class CreateCompanyUseCase {
-    constructor() { }
+  constructor() {}
 
-    async execute({ document, email }: CreateCompanyInput): Promise<Company> {
-        return {
-            companyId: "1",
-            email,
-            document,
-            status: "ACTIVE",
-            updatedAt: "2024-01-03",
-            createdAt: "2024-01-03",
-        };
-    }
+  async execute({ document, email }: CreateCompanyInput): Promise<Company> {
+    return {
+      companyId: '1',
+      email,
+      document,
+      status: 'ACTIVE',
+      updatedAt: '2024-01-03',
+      createdAt: '2024-01-03',
+    };
+  }
 }

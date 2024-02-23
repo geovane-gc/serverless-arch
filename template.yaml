@@ -15,6 +15,11 @@ Globals:
 Resources:
   SamTestGraphQlApi:
     Type: AWS::Serverless::GraphQLApi
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - W3002
     Properties:
       AuthenticationType: API_KEY
       ApiKeys:
