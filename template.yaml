@@ -1,49 +1,107 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  sam-test
+Description: "Template for a SAM test"
 
-  Sample SAM Template for sam-test
-  
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 120
+    MemorySize: 256
+    CodeUri: src/
+    Runtime: nodejs18.x
+    Architectures:
+      - x86_64
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  SamTestGraphQlApiUrl:
+    Type: AWS::Serverless::GraphQLApi
     Properties:
-      CodeUri: hello-world/
-      Handler: app.lambdaHandler
-      Runtime: nodejs20.x
-      Architectures:
-        - x86_64
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /hello
-            Method: get
-    Metadata: # Manage esbuild properties
+      AuthenticationType: API_KEY
+      ApiKeys:
+        MyApiKey:
+          Description: API Key for SAM Test API
+          ExpiresOn: 1735700399
+      Name: SamTestGraphQlApiUrl
+      ApiType: GRAPHQL
+      Auth:
+        Type: API_KEY
+      SchemaUri: ./src/graphql/schema.graphql
+      DataSources:
+        Lambda:
+          FetchCompanyDataSource:
+            FunctionArn: !GetAtt FetchCompanyFunction.Arn
+          FetchCompaniesDataSource:
+            FunctionArn: !GetAtt FetchCompaniesFunction.Arn
+      Functions:
+        fetchCompany:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: FetchCompanyDataSource
+          CodeUri: ./src/graphql/resolvers/company/fetch-company.resolver.js
+        fetchCompanies:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: FetchCompaniesDataSource
+          CodeUri: ./src/graphql/resolvers/company/fetch-companies.resolver.js
+      Resolvers:
+        Query:
+          fetchCompany:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - fetchCompany
+          fetchCompanies:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - fetchCompanies
+
+  FetchCompanyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: fetch-company.handler
+      Policies:
+        - AWSLambdaExecute
+    Metadata:
       BuildMethod: esbuild
       BuildProperties:
         Minify: true
-        Target: "es2020"
-        Sourcemap: true
-        EntryPoints: 
-        - app.ts
+        Target: es2020
+        EntryPoints:
+          - lambdas/gql/fetch-company.ts
+  FetchCompaniesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: fetch-companies.handler
+      Policies:
+        - AWSLambdaExecute
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        EntryPoints:
+          - lambdas/gql/fetch-companies.ts
+
+  AppSyncApiServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: appsync.amazonaws.com
+            Action: sts:AssumeRole
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  SamTestGraphQlApiUrl:
+    Description: "URL of the AppSync API"
+    Value: !GetAtt SamTestGraphQlApiUrl.GraphQLUrl
