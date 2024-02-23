@@ -1,6 +1,15 @@
+type Mutation {
+  createCompany(input: CreateCompanyInput!): Company
+}
+
 type Query {
   fetchCompany(input: FetchCompanyInput): FetchCompany
   fetchCompanies(input: FetchCompaniesInput): FetchCompanies
+}
+
+input CreateCompanyInput {
+  document: String!
+  email: String
 }
 
 input FetchCompanyInput {

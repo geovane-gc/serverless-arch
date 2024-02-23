@@ -6,9 +6,18 @@ scalar AWSDateTime
 
 scalar AWSTimestamp
 
+type Mutation {
+  createCompany(input: CreateCompanyInput!): Company
+}
+
 type Query {
   fetchCompany(input: FetchCompanyInput): FetchCompany
   fetchCompanies(input: FetchCompaniesInput): FetchCompanies
+}
+
+input CreateCompanyInput {
+  document: String!
+  email: String
 }
 
 input FetchCompanyInput {
@@ -49,4 +58,5 @@ type Company {
 
 schema {
   query: Query
+  mutation: Mutation
 }

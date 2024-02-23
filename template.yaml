@@ -87,6 +87,38 @@ Resources:
         EntryPoints:
           - lambdas/gql/fetch-companies.ts
 
+  CreateCompanyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: create-company.handler
+      Policies:
+        - AWSLambdaExecute
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        EntryPoints:
+          - lambdas/gql/create-company.ts
+
+  CreateCompanyDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !GetAtt SamTestGraphQlApi.ApiId
+      Name: CREATE_COMPANY
+      Type: AWS_LAMBDA
+      LambdaConfig:
+        LambdaFunctionArn: !GetAtt CreateCompanyFunction.Arn
+      ServiceRoleArn: !GetAtt AppSyncApiServiceRole.Arn
+
+  CreateCompanyResolver:
+    Type: AWS::AppSync::Resolver
+    Properties:
+      ApiId: !GetAtt SamTestGraphQlApi.ApiId
+      FieldName: createCompany
+      TypeName: Mutation
+      DataSourceName: !GetAtt CreateCompanyDataSource.Name
+
   AppSyncApiServiceRole:
     Type: AWS::IAM::Role
     Properties:

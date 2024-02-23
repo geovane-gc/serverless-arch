@@ -29,6 +29,11 @@ export type Company = {
   updatedAt?: Maybe<Scalars['AWSDate']['output']>;
 };
 
+export type CreateCompanyInput = {
+  document: Scalars['String']['input'];
+  email?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type FetchCompanies = {
   __typename?: 'FetchCompanies';
   data?: Maybe<Array<Maybe<Company>>>;
@@ -55,6 +60,16 @@ export type FetchCompany = {
 
 export type FetchCompanyInput = {
   companyId: Scalars['String']['input'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createCompany?: Maybe<Company>;
+};
+
+
+export type Mutation_CreateCompanyArgs = {
+  input: CreateCompanyInput;
 };
 
 export type Query = {
