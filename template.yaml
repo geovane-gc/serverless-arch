@@ -13,7 +13,7 @@ Globals:
       - x86_64
 
 Resources:
-  SamTestGraphQlApiUrl:
+  SamTestGraphQlApi:
     Type: AWS::Serverless::GraphQLApi
     Properties:
       AuthenticationType: API_KEY
@@ -21,7 +21,7 @@ Resources:
         MyApiKey:
           Description: API Key for SAM Test API
           ExpiresOn: 1735700399
-      Name: SamTestGraphQlApiUrl
+      Name: SamTestGraphQlApi
       ApiType: GRAPHQL
       Auth:
         Type: API_KEY
@@ -136,4 +136,4 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   SamTestGraphQlApiUrl:
     Description: "URL of the AppSync API"
-    Value: !GetAtt SamTestGraphQlApiUrl.GraphQLUrl
+    Value: !GetAtt SamTestGraphQlApi.GraphQLUrl
