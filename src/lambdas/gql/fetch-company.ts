@@ -1,7 +1,7 @@
-import { FetchCompanyInput, } from "../../graphql/types/graphql";
+import { FetchCompany, FetchCompanyInput, } from "../../graphql/types/graphql";
 import { makeFetchCompanyUseCase } from "../../use-cases/companies/factories/make-fetch-company";
 
-export async function handler(input: FetchCompanyInput) {
+export async function handler(input: FetchCompanyInput): Promise<FetchCompany> {
     try {
         const useCase = makeFetchCompanyUseCase();
         const response = await useCase.execute(input);
