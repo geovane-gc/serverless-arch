@@ -124,6 +124,38 @@ Resources:
       TypeName: Mutation
       DataSourceName: !GetAtt CreateCompanyDataSource.Name
 
+  CreateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: create-user.handler
+      Policies:
+        - AWSLambdaExecute
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        EntryPoints:
+          - lambdas/gql/create-user.ts
+
+  CreateUserDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      ApiId: !GetAtt SamTestGraphQlApi.ApiId
+      Name: CREATE_USER
+      Type: AWS_LAMBDA
+      LambdaConfig:
+        LambdaFunctionArn: !GetAtt CreateUserFunction.Arn
+      ServiceRoleArn: !GetAtt AppSyncApiServiceRole.Arn
+
+  CreateUserResolver:
+    Type: AWS::AppSync::Resolver
+    Properties:
+      ApiId: !GetAtt SamTestGraphQlApi.ApiId
+      FieldName: createUser
+      TypeName: Mutation
+      DataSourceName: !GetAtt CreateUserDataSource.Name
+
   AppSyncApiServiceRole:
     Type: AWS::IAM::Role
     Properties:

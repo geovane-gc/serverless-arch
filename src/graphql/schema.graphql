@@ -8,6 +8,7 @@ scalar AWSTimestamp
 
 type Mutation {
   createCompany(input: CreateCompanyInput!): Company
+  createUser(input: CreateUserInput!): User
 }
 
 type Query {
@@ -54,6 +55,26 @@ type Company {
   createdAt: AWSDate
   updatedAt: AWSDate
   approvalStatusUpdatedAt: AWSDate
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+type User {
+  userId: ID!
+  email: String!
+  password: String!
+  status: UserStatus!
+  createdAt: AWSDate!
+  updatedAt: AWSDate!
+  deletedAt: AWSDate
 }
 
 schema {
