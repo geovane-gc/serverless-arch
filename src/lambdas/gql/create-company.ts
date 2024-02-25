@@ -1,5 +1,5 @@
 import { Company, CreateCompanyInput } from '../../graphql/types/graphql';
-import { makeCreateCompanyUseCase } from '../../use-cases/companies/factories/make-update-company';
+import { makeCreateCompanyUseCase } from '../../use-cases/companies/factories/make-create-company';
 
 export async function handler(input: CreateCompanyInput): Promise<Company> {
   try {
