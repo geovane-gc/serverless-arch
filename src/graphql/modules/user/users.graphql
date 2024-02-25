@@ -7,17 +7,12 @@ input CreateUserInput {
   password: String!
 }
 
-enum UserStatus {
-  ACTIVE
-  INACTIVE
-}
-
 type User {
   userId: ID!
   email: String!
   password: String!
-  status: UserStatus!
-  createdAt: AWSDate!
-  updatedAt: AWSDate!
+  status: String!
+  createdAt: AWSDate
+  updatedAt: AWSDate
   deletedAt: AWSDate
 }
