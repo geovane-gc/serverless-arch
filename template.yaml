@@ -166,6 +166,28 @@ Resources:
       TypeName: Mutation
       DataSourceName: !GetAtt CreateUserDataSource.Name
 
+  ReceiveUserQueueMessageFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Environment:
+        Variables:
+          CREATE_USER_QUEUE_URL: !Ref CreateUserQueue
+          REGION: us-east-1
+      Handler: receive-user-queue-message.handler
+      Events:
+        ReceiveUserQueueMessageEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt CreateUserQueue.Arn
+            BatchSize: 10
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        EntryPoints:
+          - lambdas/gql/receive-user-queue-message.ts
+
   AppSyncApiServiceRole:
     Type: AWS::IAM::Role
     Properties:
