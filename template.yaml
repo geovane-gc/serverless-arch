@@ -12,11 +12,20 @@ Globals:
       - x86_64
 
 Resources:
+  CreateUserDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: CreateUserDeadLetterQueue
+      VisibilityTimeout: 120
+
   CreateUserQueue:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: CreateUserQueue
       VisibilityTimeout: 120
+      RedrivePolicy:
+        maxReceiveCount: 3
+        deadLetterTargetArn: !GetAtt CreateUserDeadLetterQueue.Arn
 
   SamTestGraphQlApi:
     Type: AWS::Serverless::GraphQLApi

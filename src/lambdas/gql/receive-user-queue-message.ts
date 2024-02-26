@@ -6,7 +6,7 @@ export async function handler(event: SQSEvent): Promise<void> {
             const responseObject = JSON.parse(message.body);
             const receivedData = responseObject.arguments.input;
 
-            console.log(receivedData)
+            console.log(receivedData);
         }
     } catch (error: any) {
         console.log('[ERROR]', error?.message);
