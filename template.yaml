@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: "Template for a SAM test"
 
+###################################################
+# - Globals
+###################################################
 Globals:
   Function:
     Timeout: 120
@@ -11,6 +14,9 @@ Globals:
     Architectures:
       - x86_64
 
+###################################################
+# - Resources
+###################################################
 Resources:
   CreateUserDeadLetterQueue:
     Type: AWS::SQS::Queue
@@ -218,6 +224,9 @@ Resources:
                   - "arn:aws:lambda:us-east-1:637423190364:function:sam-test-CreateCompanyFunction-6ZMOwyvSndpO"
                   - "arn:aws:lambda:us-east-1:637423190364:function:sam-test-CreateUserFunction-9LRJnjT8mKf4"
 
+###################################################
+# - Outputs
+###################################################
 Outputs:
   SamTestGraphQlApiUrl:
     Description: "URL of the AppSync API"
