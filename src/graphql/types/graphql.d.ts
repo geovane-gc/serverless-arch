@@ -83,7 +83,7 @@ export type FetchCompanyInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createCompany?: Maybe<Company>;
-  createUser?: Maybe<User>;
+  createUser?: Maybe<Scalars['String']['output']>;
 };
 
 export type Mutation_CreateCompanyArgs = {

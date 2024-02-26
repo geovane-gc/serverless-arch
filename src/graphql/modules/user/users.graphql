@@ -1,5 +1,5 @@
 type Mutation {
-  createUser(input: CreateUserInput!): User
+  createUser(input: CreateUserInput!): String
 }
 
 input CreateUserInput {

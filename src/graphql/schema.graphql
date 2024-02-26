@@ -8,7 +8,7 @@ scalar AWSTimestamp
 
 type Mutation {
   createCompany(input: CreateCompanyInput!): Company
-  createUser(input: CreateUserInput!): User
+  createUser(input: CreateUserInput!): String
 }
 
 type Query {
